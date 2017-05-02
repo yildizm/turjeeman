@@ -22,5 +22,8 @@ pip install -r requirements.txt
 npm install
 ```
 ### Running
+
+```
 ./node_modules/.bin/webpack --config webpack.config.js --watch
 django-admin.py runserver
+```
