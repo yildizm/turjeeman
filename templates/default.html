@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block main %}
+<link href="/static/css/normalize.css" rel="stylesheet" />
+<link href="/static/css/blueprint.css" rel="stylesheet" />
+<title>Turjee Man</title>
+<div id="content"></div>
+{% render_bundle 'main' %}
+{% endblock %}
+<body>
+<div id="content"></div>

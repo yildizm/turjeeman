@@ -1,0 +1,17 @@
+#npm dependency stuff
+node_modules
+
+#virtual environment dependency stuff
+env
+
+#ide thing
+.idea
+
+#webpack generated
+webpack-stats.json
+static/bundles
+
+# Byte-compiled
+*.pyo
+*.pyc
+
