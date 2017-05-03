@@ -16,8 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.views import generic
+from auth.views import auth_data
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', generic.TemplateView.as_view(template_name='default.html')),
+    url(r'^auth/data$',auth_data)
 ]

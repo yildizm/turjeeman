@@ -25,5 +25,5 @@ npm install
 
 ```
 ./node_modules/.bin/webpack --config webpack.config.js --watch
-django-admin.py runserver
+python manage.py runserver
 ```

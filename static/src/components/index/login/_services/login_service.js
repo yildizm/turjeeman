@@ -3,6 +3,17 @@ import appState from "../../../../utility/app_state";
 
 class LoginService {
     loginUser(user = {}) {
+	fetch('auth/data', {
+	  method: 'POST',
+	  headers: {
+	    'Accept': 'application/json',
+	    'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify({
+	    firstParam: 'yourValue',
+	    secondParam: 'yourOtherValue',
+	  })
+	})
         return Promise.try(() => {
             let {password, username} = user;
             if (password === "123456" && username === "deneme") {
