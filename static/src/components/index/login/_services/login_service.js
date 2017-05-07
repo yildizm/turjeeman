@@ -12,7 +12,7 @@ class LoginService {
 	    'Content-Type': 'application/json',
 	  },
 	  body: JSON.stringify({
-	    firstParam: 'yourValue',
+	    firstParam: 'xxx',
 	    secondParam: 'yourOtherValue',
 	  })
 	})

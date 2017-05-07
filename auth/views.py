@@ -7,7 +7,12 @@ from django.http import JsonResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 import json
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from SentenceMapper.mapper import Mapper
+from SentenceMapper import hypergraph
+sys.modules['hypergraph'] = hypergraph
 
 # Create your views here.
 class auth_data(View):
@@ -17,7 +22,7 @@ class auth_data(View):
 
 	def get(self,request):
 		print request.method
-		return JsonResponse({'data_list': [{'name': 'ALİ'}, {'name': 'mustafa'}]})
+		return JsonResponse({'data_list': [{'name': 'ALi'}, {'name': 'mustafa'}]})
 
 	def post(self,request):
 		mapper = Mapper()
