@@ -5,21 +5,17 @@ class LoginService {
     loginUser(user = {}) {
         return Promise.try(() => {
             let {password, username} = user;
-			fetch('auth/data', {
-				method: 'POST', 
-				headers: { 
-					'Accept': 'application/json', 
-					'Content-Type': 'application/json', 
-				}, 	
-				body:JSON.stringify({ 
-					firstParam: {username}, 
-					secondParam: {password},
-				}	
-//.replace(/{|}/gi, "")
-			}).then(response => response.json())
-			.then(response => {
-				console.log(response.json);
-			});	
+		fetch('auth/data', {
+	  method: 'POST',
+	  headers: {
+	    'Accept': 'application/json',
+	    'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify({
+	    firstParam: 'yourValue',
+	    secondParam: 'yourOtherValue',
+	  })
+	})
             if (password === "123456" && username === "deneme") {
                 let user = {username: "Baraa", name: "Baraa", surname: "Orabi"};
                 return appState.setUser(user);
