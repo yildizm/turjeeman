@@ -10,7 +10,7 @@ body {
 @media screen and (min-width: 700px) {
     .text-area {
         padding: 10px;
-        /*width: 40em;*/
+        width: 40em;
         height: 500px;
     }
 
@@ -34,11 +34,46 @@ body {
 @media screen and (max-width: 699px) and (min-width: 100px) {
     .text-area {
         padding: 4%;
-        /*width: 90%;*/
+        width: 90%;
         height: 500px;
     }
 
     .text-area-stuff {
         padding: 2%;
     }
+}
+
+.center-wh {
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-wh-stretch {
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-wv {
+    padding: 20px;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wh {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.limit-width {
+    width: 40%;
 }

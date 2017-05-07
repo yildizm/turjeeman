@@ -20,11 +20,13 @@ class TextView extends React.Component {
     }
 
     componentWillMount () {
-        let { index, currentIndex } = this.props;
+        let { index, currentIndex, sourceSelections, targetSelections } = this.props;
 
         this.setState({
             "index": index,
             "showModal": (currentIndex === index),
+            "sourceSelections": sourceSelections,
+            "targetSelections": targetSelections,
         })
     }
 
@@ -237,23 +239,23 @@ class TextView extends React.Component {
 
         return <span>
                 {(color === "white")
-                    ? <span key={index}
-                            style={{backgroundColor: color}}>
+                ? <span key={index}
+                        style={{backgroundColor: color}}>
                     {character}
                 </span>
-                    :
-                    <Popover
-                        content={popoverContent}
-                        interactionKind={PopoverInteractionKind.HOVER}
-                        popoverClassName="pt-popover-content-sizing"
-                        position={Position.TOP}
+                :
+                <Popover
+                    content={popoverContent}
+                    interactionKind={PopoverInteractionKind.HOVER}
+                    popoverClassName="pt-popover-content-sizing"
+                    position={Position.TOP}
                     >
                     <span key={index}
                           style={{backgroundColor: color}}>
                         {character}
                     </span>
-                    </Popover>
-                }
+                </Popover>
+            }
         </span>;
     }
 
@@ -275,6 +277,13 @@ class TextView extends React.Component {
                 <div>
                     <div className="center-wh-stretch">
                         <div className="center-wv">
+                            <div className="buttons-stuff">
+                                <button type="button"
+                                        onClick={this.showModal.bind(this)}
+                                        className="pt-button pt-intent-primary">
+                                    Tokenize
+                                </button>
+                            </div>
                             <div className="text-area-stuff">
                                 {input_.map(this.renderCharacter.bind(this, "input"))}
                             </div>
@@ -282,6 +291,35 @@ class TextView extends React.Component {
                                 {output_.map(this.renderCharacter.bind(this, "output"))}
                             </div>
                         </div>
+                        {showModal &&
+                            <div className="center-wh">
+                                <div className="center-wv">
+                                    <div className="text-area-stuff scrollable-div"
+                                         onKeyUp={this.handleSelect.bind(this, "input")}
+                                         onKeyDown={this.handleSelect.bind(this, "input")}
+                                         onClick={this.handleSelect.bind(this, "input")}>
+                                        <div>
+                                            {input}
+                                        </div>
+                                    </div>
+                                    <div className="text-area-stuff scrollable-div"
+                                         onKeyUp={this.handleSelect.bind(this, "output")}
+                                         onKeyDown={this.handleSelect.bind(this, "output")}
+                                         onClick={this.handleSelect.bind(this, "output")}>
+                                        <div>
+                                            {output}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <button type="button" onClick={this.addSelection.bind(this)} className="pt-button pt-intent-primary">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <hr />
                     <br />

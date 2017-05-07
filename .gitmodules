@@ -1,0 +1,3 @@
+[submodule "SentenceMapper"]
+	path = SentenceMapper
+	url = git@github.com:baraaorabi/SentenceMapper.git
