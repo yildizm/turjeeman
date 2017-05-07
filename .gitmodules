@@ -1,6 +1,6 @@
-[submodule "SentenceMapper"]
-	path = SentenceMapper
-	url = git@github.com:baraaorabi/SentenceMapper.git
 [submodule "turjeeman-client"]
 	path = turjeeman-client
 	url = git@github.com:cagdass/turjeeman-client.git
+[submodule "SentenceMapper"]
+	path = SentenceMapper
+	url = git@github.com:baraaorabi/SentenceMapper.git
