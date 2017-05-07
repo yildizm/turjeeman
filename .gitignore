@@ -3,7 +3,7 @@ node_modules
 
 #virtual environment dependency stuff
 env
-run.sh
+
 #ide thing
 .idea
 
