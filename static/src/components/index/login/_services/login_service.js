@@ -5,17 +5,6 @@ class LoginService {
     loginUser(user = {}) {
         return Promise.try(() => {
             let {password, username} = user;
-		fetch('auth/data', {
-	  method: 'POST',
-	  headers: {
-	    'Accept': 'application/json',
-	    'Content-Type': 'application/json',
-	  },
-	  body: JSON.stringify({
-	    firstParam: 'xxx',
-	    secondParam: 'yourOtherValue',
-	  })
-	})
             if (password === "123456" && username === "deneme") {
                 let user = {username: "Baraa", name: "Baraa", surname: "Orabi"};
                 return appState.setUser(user);
