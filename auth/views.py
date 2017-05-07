@@ -25,23 +25,11 @@ class auth_data(View):
 		return JsonResponse({'data_list': [{'name': 'ALi'}, {'name': 'mustafa'}]})
 
 	def post(self,request):
-		mapper = Mapper()
-		sent_A = 'It was the best of times'
-		tokens_A = ['It', 'was', 'the', 'best', 'of', 'times']
-		sent_B = 'Zamanlarin en iyisi idi'
-		tokens_B = ['Zamanlarin', 'en', 'iyi', 'si', 'idi']
-		auto_map = mapper.auto_map_sentences(sent_A, tokens_A, sent_B, tokens_B)
-	
-		print '\nAuto mapped index pairs:'
-		for k, v in auto_map.items():
-			print v
-		#print 'Raw Data: "%s"' % request.POST.get('username')
+		print 'Raw Data: "%s"' % request.body
 		with open('data.txt', 'w') as outfile:
 			print "hebele"
 			json.dump(request.body, outfile)
-		#return JsonResponse({'data_list': [{'name': 'ALİ'}, {'name': 'mustafa'}]})
 		return HttpResponse("OK")
-		#print request.POST
 		#return JsonResponse({'data_list': [{'name': 'ALİ'}, {'name': 'mustafa'}]})
 
 
