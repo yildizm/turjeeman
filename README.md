@@ -25,5 +25,6 @@ npm install
 
 ```
 ./node_modules/.bin/webpack --config webpack.config.js --watch
+source env/bin/activate
 python manage.py runserver
 ```

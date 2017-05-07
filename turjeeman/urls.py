@@ -21,5 +21,5 @@ from auth.views import auth_data
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', generic.TemplateView.as_view(template_name='default.html')),
-    url(r'^auth/data$',auth_data)
+    url(r'^auth/data$',auth_data.as_view())
 ]
