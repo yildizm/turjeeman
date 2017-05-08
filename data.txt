@@ -1,1 +1,1 @@
-"{\"firstParam\":\"xxx\",\"secondParam\":\"yourOtherValue\"}"
+"{\"username\":{\"username\":\"deneme\"},\"password\":{\"password\":\"123456\"}}"
