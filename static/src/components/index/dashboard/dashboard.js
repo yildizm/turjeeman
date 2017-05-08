@@ -17,25 +17,41 @@ class Dashboard extends React.Component {
 
     componentDidMount () {
         // @TODO Replace with the actual backend function
-        this.setState({
-            projects: [
-                {
-                    id: 1,
-                    title: "Baraa Stuff",
-                    sourceLanguage: "AR",
-                    targetLanguage: "TR",
-                    lastSaved: "23/07/2016",
-                },
-                {
-                    id: 2,
-                    title: "Homo Baraaus",
-                    sourceLanguage: "EN",
-                    targetLanguage: "TR",
-                    lastSaved: "19/05/2017",
-                },
-            ],
+        fetch('storage', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
         })
-
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
+            if(data.response === 'OK'){
+                console.log(data.title)
+                console.log(JSON.stringify(data));
+                this.setState({
+                    projects: [
+                        {
+                            id: data.id,
+                            title: data.title,
+                            sourceLanguage: data.source_lang,
+                            targetLanguage: data.target_lang,
+                            lastSaved: data.timestamp,
+                        },
+                        {
+                            id: 2,
+                            title: "Homo Baraaus",
+                            sourceLanguage: "EN",
+                            targetLanguage: "TR",
+                            lastSaved: "19/05/2017",
+                        },
+                    ],
+                })
+            }
+            else{
+                throw{errorMessage: "Wrong credentials"};
+            }
+        }).catch(error => console.error(error));
     }
 
     renderProjectListing (project) {

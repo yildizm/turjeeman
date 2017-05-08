@@ -17,7 +17,9 @@ class storage(View):
         all_entries = Project.objects.all()
         print all_entries
         return HttpResponse('result')
+
     def get(self, request):
     	p = Project.objects.get(username=User.objects.get(username='ali'))
     	print p.title,p.source_language,p.target_language,p.timestamp
-    	return HttpResponse(p)
+        return JsonResponse({'id': p.id, 'title':p.title, 'source_lang': p.source_language, 'target_lang': p.target_language, 'timestamp':p.timestamp,'response':'OK'})
+    	#return HttpResponse(p)

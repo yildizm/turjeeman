@@ -5,13 +5,28 @@ class LoginService {
     loginUser(user = {}) {
         return Promise.try(() => {
             let {password, username} = user;
-            if (password === "123456" && username === "deneme") {
-                let user = {username: "Baraa", name: "Baraa", surname: "Orabi"};
-                return appState.setUser(user);
-            } else {
-                throw {errorMessage: "Wrong credentials"};
-            }
-        })
+            fetch('auth/data', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: user.username,
+                    password: user.password,
+                })
+            })
+            .then((resp) => resp.json()) // Transform the data into json
+            .then(function(data) {
+                if(data.response === 'OK'){
+                    let user = {username: data.username, name:data.name, surname:data.surname}
+                    return appState.setUser(user);
+                }
+                else{
+                    throw{errorMessage: "Wrong credentials"};
+                }
+            })
+        });
     }
 
     logoutUser() {

@@ -30,16 +30,15 @@ class auth_data(View):
 		#with open('data.txt', 'w') as outfile:
 		#	json.dump(request.body, outfile)
 		data = json.loads(request.body)
-		username = data['username']['username']
-		password = data['password']['password']
+		username = data['username']
+		password = data['password']
 		user = authenticate(request, username=username, password=password)
+		print user.first_name
 		if user is not None:
-			print "OK"
-			return HttpResponse("OK")
+			return JsonResponse({'username':username, 'name': user.first_name, 'surname': user.last_name, 'response':'OK'})
 		    # A backend authenticated the credentials
 		else:
-			print "BAD"
-			return HttpResponse("BAD")
+			return JsonResponse({'name': '', 'surname': '', 'response':'BAD'})
 			# No backend authenticated the credentials
 			#return JsonResponse({'data_list': [{'name': 'ALİ'}, {'name': 'mustafa'}]})
 
