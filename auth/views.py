@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views import View
+from django.contrib.auth import authenticate
 from django.utils.decorators import method_decorator
 import json
 import sys
@@ -25,12 +26,22 @@ class auth_data(View):
 		return JsonResponse({'data_list': [{'name': 'ALi'}, {'name': 'mustafa'}]})
 
 	def post(self,request):
-		print 'Raw Data: "%s"' % request.body
-		with open('data.txt', 'w') as outfile:
-			print "hebele"
-			json.dump(request.body, outfile)
-		return HttpResponse("OK")
-		#return JsonResponse({'data_list': [{'name': 'ALİ'}, {'name': 'mustafa'}]})
+		#print 'Raw Data: "%s"' % request.body
+		#with open('data.txt', 'w') as outfile:
+		#	json.dump(request.body, outfile)
+		data = json.loads(request.body)
+		username = data['username']['username']
+		password = data['password']['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			print "OK"
+			return HttpResponse("OK")
+		    # A backend authenticated the credentials
+		else:
+			print "BAD"
+			return HttpResponse("BAD")
+			# No backend authenticated the credentials
+			#return JsonResponse({'data_list': [{'name': 'ALİ'}, {'name': 'mustafa'}]})
 
 
 
