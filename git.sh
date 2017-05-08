@@ -9,4 +9,4 @@ git add .
 git commit -m "$2"
 git push origin $1
 echo "copying."
-cp -r turjeeman-client/src/ static
+#cp -r turjeeman-client/src/ static
