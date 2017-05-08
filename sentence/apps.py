@@ -4,5 +4,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class SentencerConfig(AppConfig):
-    name = 'sentencer'
+class SentenceConfig(AppConfig):
+    name = 'sentence'
