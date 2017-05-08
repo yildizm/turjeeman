@@ -10,7 +10,6 @@ env
 #webpack generated
 webpack-stats.json
 static/bundles
-static/src
 
 # Byte-compiled
 *.pyo
