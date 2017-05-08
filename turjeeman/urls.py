@@ -20,6 +20,7 @@ from auth.views import auth_data
 from mapper.views import mapper
 from storage.views import storage
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', generic.TemplateView.as_view(template_name='default.html')),
