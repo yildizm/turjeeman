@@ -20,7 +20,7 @@ class Edit extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount () {
         let id = this.props.params.id.trim();
 
         let project = appState.getEdit(id);
@@ -48,8 +48,8 @@ class Edit extends React.Component {
         }
     }
 
-    handleChange (fieldName, event) {
-        let text = event.target.value;
+    handleChange (fieldName, value) {
+        let text = value
 
         this.setState({
             [fieldName]: text,
@@ -61,6 +61,8 @@ class Edit extends React.Component {
         let { router } = this.context;
 
         appState.setEdit(id, inputText, outputText, sourceLanguage, targetLanguage, projectTitle);
+
+        // @TODO send source&target texts to the sentencer.
 
         router.push("/sentencer/ " + id);
     }
@@ -88,6 +90,21 @@ class Edit extends React.Component {
         })
     }
 
+    saveProject () {
+        // Don't know any user_ids.
+        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage } = this.state;
+
+        // The request object.
+        let request = {
+            "user_id": user_id,
+            "project_id": id,
+            "title": projectTitle,
+            "timestamp": (Math.floor(Date.now() / 1000)),
+            "source_language": sourceLanguage,
+            "target_language": targetLanguage,
+        }
+    }
+
     render () {
         let { inputText, outputText, sourceLanguage, targetLanguage, projectTitle, id } = this.state;
 
@@ -103,7 +120,6 @@ class Edit extends React.Component {
                         />
                     </h1>
                 </div>
-                {/*<pre>{`Project Title: ${projectTitle}\nInput text: ${inputText}\nOutput text: ${outputText}\nSource language: ${sourceLanguage}\nTarget language: ${targetLanguage}`}</pre>*/}
                 <div className="center-wv">
                     <div>
                         <div className="pt-select" style={{margin: 20}}>
@@ -123,22 +139,35 @@ class Edit extends React.Component {
                     </div>
                 </div>
                 <div className="center-wv">
-                    <div className="encapsulator">
-                        <textarea
-                            className="text-field pt-input pt-large "
-                            dir="auto"
+                    <div style={{marginLeft: 50, marginRight: 50, padding: 100}}>
+                        <EditableText
+                            className="limit-width"
+                            multiline minLines={3} maxLines={12}
+                            placeholder="Enter source text"
+                            selectAllOnFocus={this.state.selectAllOnFocus}
+                            value={inputText}
                             onChange={this.handleChange.bind(this, "inputText")}
-                        >{inputText}</textarea>
+                        />
                     </div>
-                    <div className="encapsulator">
-                        <textarea
-                            className="pt-input pt-large text-field"
-                            dir="auto"
+                    <div style={{marginLeft: 50, marginRight: 50, padding: 100}}>
+                        <EditableText
+                            className="limit-width"
+                            multiline minLines={3} maxLines={12}
+                            placeholder="Enter target text"
+                            selectAllOnFocus={this.state.selectAllOnFocus}
+                            value={outputText}
                             onChange={this.handleChange.bind(this, "outputText")}
-                        >{outputText}</textarea>
+                        />
                     </div>
                 </div>
-                <div style={{paddingBottom: 100}}>
+                <div style={{paddingBottom: 100, marginLeft: 100}}>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save"
+                        style={{margin: 20}}>
+                        Save project
+                    </button>
                     <button onClick={this.nextStage.bind(this)} type="button" className="pt-button pt-intent-success">
                         Sentencer
                         <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>

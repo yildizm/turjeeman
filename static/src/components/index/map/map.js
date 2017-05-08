@@ -4,7 +4,9 @@ import TextView from "./text_view/text_view";
 
 import "./_assets/style.css"
 
-const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen"];
+import appState from "../../../utility/app_state";
+
+const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen", "#008844"];
 
 class Project extends React.Component {
     constructor (props, context, ...args) {
@@ -12,37 +14,76 @@ class Project extends React.Component {
         this.state = {
             "id": "",
             "sentences": [],
+            "projectTitle": "",
+            "inputText": "",
+            "outputText": "",
+            "sourceLanguage": "",
+            "targetLanguage": "",
             "tokens": [],
             "mappings": [],
             "currentInputSelections": [],
             "currentOutputSelections": [],
-            "activeIndex": -1,
-            "activeColor": -1,
+            "activeColor": 0,
             "activeColorLiteral": "",
         };
     }
 
-    componentWillMount () {
+    componentDidMount () {
         let id = this.props.params.id.trim();
 
-        this.setState({id});
+        let edit = appState.getEdit(id);
+        let sentencer = appState.getSentencer(id);
+        let tokenizer = appState.getTokenizer(id);
+        let mapper = appState.getMapper(id);
 
-        // let tokenizer = appState.getTokenizer(id);
-        // let edit = appState.getEdit(id);
-        // let map = appState.getMap(id);
+        if (edit !== {}) {
+            this.setState({
+                id: id,
+                projectTitle: edit.projectTitle,
+                inputText: edit.inputText,
+                outputText: edit.outputText,
+                sourceLanguage: edit.sourceLanguage,
+                targetLanguage: edit.targetLanguage,
+            });
+        }
 
-    }
+        let sentences = [];
 
-    componentDidMount () {
-        // @TODO: Replace this with a backend function that'll retrieve the input/output text.
+        if (sentencer !== {}) {
+            sentences = sentencer.sentences;
+            this.setState({
+                "id": id,
+                "sentences": sentencer.sentences,
+            });
+        }
+
+        let tokens = [];
+        for (let i = 0; i < sentences.length; i++) {
+            tokens.push([]);
+        }
+
         this.setState({
-            sentences: [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
-                , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-                , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
-                , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-                , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-            ],
-        })
+            id: id,
+            tokens: tokens
+        });
+
+        if (tokenizer !== {}) {
+            if (tokenizer.tokens.length >= sentences.length && tokenizer.tokens !== []) {
+                if (mapper !== {}) {
+                    this.setState({
+                        mappings: mapper.mappings,
+                        id: id,
+                        tokens: tokenizer.tokens,
+                    });
+                }
+                else{
+                    this.setState({
+                        id: id,
+                        tokens: tokenizer.tokens,
+                    });
+                }
+            }
+        }
     }
 
     saveMapping () {
@@ -95,19 +136,24 @@ class Project extends React.Component {
         </div>)
     }
 
-    handleTokenChange () {
+    handleTokenChange (index, selectedMappings) {
+        let { mappings } = this.state;
 
-    }
+        mappings[index] = selectedMappings;
 
-    changeActiveIndex (index) {
-
+        this.setState({mappings});
     }
 
     renderSentencePair (sentencePair, index) {
         let source = sentencePair[0] || "";
         let target = sentencePair[1] || "";
 
-        let { activeIndex } = this.state;
+        let { tokens = [], activeColorLiteral, activeColor } = this.state;
+
+        let tokens_ = [];
+        if (tokens.length > index) {
+            tokens_ = tokens[index];
+        }
 
         return (<div className="center-wv">
             <TextView
@@ -115,9 +161,9 @@ class Project extends React.Component {
                 output={target}
                 ref={"tokenize_" + index}
                 onChange={this.handleTokenChange.bind(this)}
-                setActiveIndex={this.changeActiveIndex.bind(this, index)}
-                currentIndex={activeIndex}
                 index={index}
+                tokens={tokens_}
+                activeColor={activeColor}
             />
         </div>)
     }
@@ -150,22 +196,88 @@ class Project extends React.Component {
         }
     }
 
-    render () {
-        let { inputText = "", outputText = "", sentences = [], mappings, activeColor } = this.state;
+    previousStage () {
+        let { id, mappings } = this.state;
 
-        let nums = [0,1,2,3,4,5,6,7,8,9,10];
+        let { router } = this.context;
+
+        appState.setMapper(id, mappings);
+
+        router.push("/tokenizer/" + id);
+    }
+
+    saveProject () {
+        // Don't know any user_ids.
+        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences, tokens, mappings } = this.state;
+
+        // The request object.
+        let request = {
+            "user_id": user_id,
+            "project_id": id,
+            "title": projectTitle,
+            "timestamp": (Math.floor(Date.now() / 1000)),
+            "source_language": sourceLanguage,
+            "target_language": targetLanguage,
+            "sentence_pairs": sentences,
+            "tokens": tokens,
+            "mappings": mappings,
+        }
+
+        // @TODO send request with the "request" object. Send objects in "edit.js", "tokenizer.js", "sentencer.js"
+    }
+
+    render () {
+        let { inputText = "", outputText = "", sentences = [], mappings, activeColor, projectTitle } = this.state;
+
+        let nums = [0,1,2,3,4,5,6,7,8,9,10,11];
 
         return (
             <div className="center-wh">
-                <h1>Project</h1>
+                <div className="center-wv" style={{paddingTop: 50, marginRight: 120}}>
+                    <button
+                        onClick={this.previousStage.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-warning"
+                        style={{margin: 20}}>
+                        <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
+                        Tokenizer
+                    </button>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save"
+                        style={{margin: 20}}>
+                        Save project
+                        <span className="pt-icon-standard pt-align-right" />
+                    </button>
+                </div>
+                <h1>{projectTitle}</h1>
                 <div className="colors-shit center-wv">
                     {nums.map(this.renderColorPicks.bind(this))}
                 </div>
-                {mappings.map(this.renderMappingPair.bind(this))}
+                {/*{mappings.map(this.renderMappingPair.bind(this))}*/}
                 <div className="translate-div">
                     <div className="center-wh">
                         {sentences.map(this.renderSentencePair.bind(this))}
                     </div>
+                </div>
+                <div className="center-wv" style={{paddingBottom: 100, marginRight: 120}}>
+                    <button
+                        onClick={this.previousStage.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-warning"
+                        style={{margin: 20}}>
+                        <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
+                        Tokenizer
+                    </button>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save"
+                        style={{margin: 20}}>
+                        Save project
+                        <span className="pt-icon-standard pt-align-right" />
+                    </button>
                 </div>
             </div>
         );
