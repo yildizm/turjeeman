@@ -50,19 +50,24 @@ class Sentencer extends React.Component {
     autoSentencer () {
         let { inputText, outputText } = this.state;
 
-        fetch('mapper/', {
+        fetch('mapper', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                tokens: [],
                 sentence_pairs: [inputText, outputText],
             })
         }).then(response => {
             let obj = response.json();
-            console.log(obj);
+            // Access fields in the response object.
+
+            let sentences = obj.sentences;
+            this.setState({
+                "sentences": sentences
+            })
+
         }).catch(error => console.error(error));
     }
 
