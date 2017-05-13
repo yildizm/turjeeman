@@ -19,6 +19,7 @@ from django.views import generic
 from auth.views import auth_data
 from mapper.views import mapper
 from storage.views import storage
+from register.views import register
 
 
 urlpatterns = [
@@ -27,4 +28,5 @@ urlpatterns = [
     url(r'^auth/data$',auth_data.as_view()),
     url(r'^mapper/$',mapper.as_view()),
     url(r'^storage/$',storage.as_view()),
+    url(r'^register/$',register.as_view()),
 ]

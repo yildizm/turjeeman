@@ -27,7 +27,13 @@ class Sentencer extends React.Component {
 
         let edit = appState.getEdit(id);
 
+        let inputText = "";
+        let outputText = "";
+
         if (edit !== {}) {
+            inputText = edit.inputText;
+            outputText = edit.outputText;
+
             this.setState({
                 id: id,
                 projectTitle: edit.projectTitle,
@@ -38,19 +44,22 @@ class Sentencer extends React.Component {
             });
         }
 
-        // @TODO: Replace this with a backend function that'll retrieve the results of the sentencer.
         this.setState({
+            sentences: [inputText, outputText],
+        });
+        // @TODO: Replace this with a backend function that'll retrieve the results of the sentencer.
+        /*this.setState({
             sentences: [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
             , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
                 , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
             ],
-        })
+        })*/
     }
 
     autoSentencer () {
         let { inputText, outputText } = this.state;
 
-        fetch('mapper', {
+        fetch('sentence/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

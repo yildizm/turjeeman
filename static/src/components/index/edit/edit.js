@@ -91,18 +91,43 @@ class Edit extends React.Component {
     }
 
     saveProject () {
-        // Don't know any user_ids.
+        let user = appState.getUser();
+        let username = user.username;
         let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage } = this.state;
 
         // The request object.
-        let request = {
+        /*let request = {
             "user_id": user_id,
             "project_id": id,
             "title": projectTitle,
             "timestamp": (Math.floor(Date.now() / 1000)),
             "source_language": sourceLanguage,
             "target_language": targetLanguage,
-        }
+        }*/
+        fetch('storage/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": username,
+                "id": id,
+                "title": projectTitle,
+                "timestamp": (Math.floor(Date.now() / 1000)),
+                "source_language": sourceLanguage,
+                "target_language": targetLanguage,
+                "status": 'store',
+            })
+        })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
+            if(data.response === 'OK'){
+            }
+            else{
+                throw{errorMessage: "Wrong credentials"};
+            }
+        }).catch(error => console.error(error));
     }
 
     render () {

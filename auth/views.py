@@ -2,11 +2,12 @@
 from __future__ import unicode_literals
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views import View
 from django.contrib.auth import authenticate
-from django.utils.decorators import method_decorator
+
 import json
 import sys
 import os.path

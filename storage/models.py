@@ -7,8 +7,8 @@ from django.db import models
 
 class Project(models.Model):
 	title = models.CharField(max_length=30)
-	source_language = models.CharField(max_length=4)
-	target_language = models.CharField(max_length=4)
+	source_language = models.CharField(max_length=15)
+	target_language = models.CharField(max_length=15)
 	timestamp = models.DateField()
 	username = models.ForeignKey(User, on_delete=models.CASCADE)
 
