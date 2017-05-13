@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
 import json
+from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 # Create your views here.
 
 # Create your views here.
@@ -22,17 +24,15 @@ class storage(View):
         data = json.loads(request.body)
         username = data['username']
         if data['status'] == 'fetch':
-            #p = Project.objects.get(username=User.objects.get(username=username))
-            pList= list(Project.objects.filter(username=User.objects.get(username=username)))
-            for p in pList:
-                print("title: "+p.title)
-            return JsonResponse({'id': pList[0].id, 'title':pList[0].title, 'source_lang': pList[0].source_language, 'target_lang': pList[0].target_language, 'timestamp':pList[0].timestamp,'response':'OK'})
+            pList = list(Project.objects.filter(username=User.objects.get(username=username)).values())
+            return JsonResponse(dict(projects=pList,response='OK'))
         elif data['status'] == 'store':
             project = Project.objects.get(username=User.objects.get(username=username),id=data['id'])
             project.title = data['title']
             project.source_language = data['source_language']
             project.target_language = data['target_language']
             project.timestamp = datetime.now()
+            project.sentence_pairs = [["It was the best of times, it was the worst of times", "Zamanlarin en iyisi idi, zamanlarin en kotusu idi."], ["It was the age of wisdom.", "Bilgelik cagi idi."]]
             project.save()
             return HttpResponse("OK")
         else:

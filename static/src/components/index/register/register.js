@@ -76,11 +76,32 @@ class Register extends React.Component {
             let { email, password, firstName, lastName } = this.state;
 
             let request = {
-                "email": email,
-                "password": password,
-                "firstName": firstName,
-                "lastName": lastName,
+
             };
+            fetch('register/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "email": email,
+                    "password": password,
+                    "firstName": firstName,
+                    "lastName": lastName,
+                })
+            })
+            .then((resp) => resp.json()) // Transform the data into json
+            .then(function(data) {
+                if(data.response === 'OK'){
+                    console.log(data.name,data.surname)
+                    let user = {username: data.username, name:data.name, surname:data.surname}
+                    return appState.setUser(user);
+                }
+                else{
+                    throw{errorMessage: "error"};
+                }
+            })
 
             router.push("/login")
         }

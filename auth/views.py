@@ -17,10 +17,10 @@ from SentenceMapper import hypergraph
 sys.modules['hypergraph'] = hypergraph
 
 # Create your views here.
-class auth_data(View):
+class auth(View):
 	@method_decorator(csrf_exempt)
 	def dispatch(self, request, *args, **kwargs):
-		return super(auth_data, self).dispatch(request, *args, **kwargs)
+		return super(auth, self).dispatch(request, *args, **kwargs)
 
 	def get(self,request):
 		print request.method
@@ -33,8 +33,8 @@ class auth_data(View):
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
+		print username,password
 		user = authenticate(request, username=username, password=password)
-		print user.first_name
 		if user is not None:
 			return JsonResponse({'username':username, 'name': user.first_name, 'surname': user.last_name, 'response':'OK'})
 		    # A backend authenticated the credentials

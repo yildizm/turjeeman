@@ -5,7 +5,7 @@ class LoginService {
     loginUser(user = {}) {
         return Promise.try(() => {
             let {password, username} = user;
-            fetch('auth/data', {
+            fetch('auth/', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

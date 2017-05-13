@@ -35,9 +35,13 @@ class Dashboard extends React.Component {
         })
         .then((resp) => resp.json()) // Transform the data into json
         .then(data => {
+            console.log(data);
             if(data.response === 'OK'){
+                let i = data.projects.length;
+                console.log(data.projects.length);
                 this.setState({
-                    projects: [
+                    projects: data.projects
+                    /*projects: [ 
                         {
                             id: data.id,
                             title: data.title,
@@ -45,7 +49,7 @@ class Dashboard extends React.Component {
                             targetLanguage: data.target_lang,
                             lastSaved: data.timestamp,
                         },
-                    ],
+                    ],*/
                 })
             }
             else{
@@ -96,7 +100,6 @@ class Dashboard extends React.Component {
             if(data.response === 'OK'){
                 console.log(data.id)
                 retrievedID = data.id;
-                console.log("asd")
                 console.log(retrievedID);
                 router.push("/edit/" + data.id);
             }
