@@ -31,7 +31,7 @@ function AppState() {
 
     appState.getSentencer = (id) => {
         for (let i = 0; i < sentencers.length; i++) {
-            if (sentencers[i].id === id) {
+            if (sentencers[i].id == id) {
                 return sentencers[i];
             }
         }
@@ -132,7 +132,7 @@ function AppState() {
 
     appState.getEdit = (id) => {
         for (let i = 0; i < projects.length; i++) {
-            if (projects[i].id === id) {
+            if (projects[i].id == id) {
                 return projects[i];
             }
         }

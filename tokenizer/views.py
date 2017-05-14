@@ -10,7 +10,7 @@ import xmlrpclib, json
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 # Create your views here.
-server_ip = '139.179.103.66'
+server_ip = 'localhost'
 server_port = '8081'
 
 class tokenizer(View):
@@ -54,8 +54,11 @@ class tokenizer(View):
 		all_tokens = []
 		for source_sent, target_sent in sentence_pairs:
 			tokens = []
-			s_t = tokenizer_server_proxy.tokenize(source_sent, json_obj['source_language'])
-			t_t = tokenizer_server_proxy.tokenize(target_sent, json_obj['target_language'])
+			source_lang = json_obj['source_language'][0:3].upper()
+			target_lang = json_obj['target_language'][0:3].upper()
+			
+			s_t = tokenizer_server_proxy.tokenize(source_sent, source_lang)
+			t_t = tokenizer_server_proxy.tokenize(target_sent, target_lang)
 
 			tokens.append(self.generate_index_pairs_from_tokens(s_t, source_sent))
 			tokens.append(self.generate_index_pairs_from_tokens(t_t, target_sent))

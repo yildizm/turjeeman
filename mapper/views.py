@@ -9,8 +9,8 @@ import xmlrpclib, json
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 # Create your views here.
-server_ip = '139.179.103.66'
-server_port = '8080'
+server_ip = 'localhost'
+server_port = '8082'
 
 class mapper(View):
 	@method_decorator(csrf_exempt)

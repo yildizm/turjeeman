@@ -189,8 +189,8 @@ class Tokenizer extends React.Component {
     }
 
     autoTokenizer () {
-        let { sentences } = this.state;
-
+        console.log("auto tokenizer is called");
+        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences, tokens } = this.state;
         fetch('tokenizer/', {
             method: 'POST',
             headers: {
@@ -198,27 +198,30 @@ class Tokenizer extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                sentence_pairs: sentences
+                sentence_pairs: sentences,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
             })
-        }).then(response => {
-            let obj = response.json();
-            // Access fields in the response object.
-
-            let tokens = obj.tokens;
+        })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
+            console.log("response is received");
+            let tokens = data.tokens;
             this.setState({
                 "tokens": tokens
             })
-
         }).catch(error => console.error(error));
-    }
 
+
+    }
     render () {
         let { tokens, projectTitle, sentences = [], id, activeIndex } = this.state;
 
         return (
             <div>
                 <div className="center-wh">
-                    {/*<pre>{`Sentences: ${sentences.length}\nTokens: ${JSON.stringify(tokens)}`}</pre>*/}
+                    //{/*<pre>{`Sentences: ${sentences.length}\nTokens: ${JSON.stringify(tokens)}`}</pre>*/}
+                    <pre>{`Sentences: ${sentences.length}\nTokens: ${JSON.stringify(tokens)}`}</pre>
                     <div className="center-wv" style={{paddingTop: 100}}>
                         <button
                             onClick={this.previousStage.bind(this)}

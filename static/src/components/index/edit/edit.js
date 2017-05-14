@@ -22,8 +22,8 @@ class Edit extends React.Component {
 
     componentDidMount () {
         let id = this.props.params.id.trim();
-
         let project = appState.getEdit(id);
+        let sentences = appState.getSentencer(id);
         console.log(project);
 
         if (project !== {}) {
@@ -44,6 +44,7 @@ class Edit extends React.Component {
                 outputText: "",
                 sourceLanguage: "",
                 targetLanguage: "",
+                sentence_pairs: sentences.sentences
             });
         }
     }
@@ -93,7 +94,8 @@ class Edit extends React.Component {
     saveProject () {
         let user = appState.getUser();
         let username = user.username;
-        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage } = this.state;
+        let { inputText, outputText, sourceLanguage, targetLanguage, projectTitle, id } = this.state;
+        //let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage } = this.state;
 
         // The request object.
         /*let request = {
@@ -104,6 +106,7 @@ class Edit extends React.Component {
             "source_language": sourceLanguage,
             "target_language": targetLanguage,
         }*/
+        console.log("whh?");
         fetch('storage/', {
             method: 'POST',
             headers: {
@@ -117,6 +120,8 @@ class Edit extends React.Component {
                 "timestamp": (Math.floor(Date.now() / 1000)),
                 "source_language": sourceLanguage,
                 "target_language": targetLanguage,
+                "inputText" : inputText,
+                "outputText" :outputText,
                 "status": 'store',
             })
         })
@@ -150,15 +155,15 @@ class Edit extends React.Component {
                         <div className="pt-select" style={{margin: 20}}>
                             <select onChange={this.updateLanguage.bind(this, "sourceLanguage")}>
                                 {sourceLanguage === "" ? <option defaultValue>Choose source language</option> : <option defaultValue>{sourceLanguage}</option>}
-                                {sourceLanguage !== "English" && <option value="English">English</option>}
-                                {sourceLanguage !== "Turkish" && <option value="Turkish">Turkish</option>}
+                                {sourceLanguage !== "ENG" && <option value="ENG">ENG</option>}
+                                {sourceLanguage !== "TR" && <option value="TR">TR</option>}
                             </select>
                         </div>
                         <div className="pt-select" style={{margin: 20}}>
                             <select onChange={this.updateLanguage.bind(this, "targetLanguage")}>
                                 {targetLanguage === "" ? <option defaultValue>Choose target language</option> : <option defaultValue>{targetLanguage}</option>}
-                                {targetLanguage !== "English" && <option value="English">English</option>}
-                                {targetLanguage !== "Turkish" && <option value="Turkish">Turkish</option>}
+                                {targetLanguage !== "ENG" && <option value="ENG">ENG</option>}
+                                {targetLanguage !== "TR" && <option value="TR">TR</option>}
                             </select>
                         </div>
                     </div>

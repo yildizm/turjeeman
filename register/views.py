@@ -16,8 +16,7 @@ class register(View):
         return super(register, self).dispatch(request, *args, **kwargs)
     def post(self, request):
     	data = json.loads(request.body)
-		# form to sign up is valid
-        if User.objects.filter(username=data['firstName']).exists():
+        if User.objects.filter(username=data['username']).exists():
             return HttpResponse("BAD")
         else:
             user = User.objects.create_user(username=data['username'],password=data['password'])
@@ -27,7 +26,7 @@ class register(View):
             user.is_active=True
             user.save()
             #send_mail('subject', 'msg [include activation link to View here to activate account]', 'from_email', ['to_email'], fail_silently=False)
-        return HttpResponse("OK")
+            return JsonResponse({'response':"OK"})
 
     def get(self, request):
         username = None

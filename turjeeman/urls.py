@@ -20,6 +20,8 @@ from auth.views import auth
 from mapper.views import mapper
 from storage.views import storage
 from register.views import register
+from sentence.views import sentence
+from tokenizer.views import tokenizer
 
 
 urlpatterns = [
@@ -29,4 +31,7 @@ urlpatterns = [
     url(r'^mapper/$',mapper.as_view()),
     url(r'^storage/$',storage.as_view()),
     url(r'^register/$',register.as_view()),
+    url(r'^sentence/$',sentence.as_view()),
+    url(r'^tokenizer/$',tokenizer.as_view()),
+    
 ]

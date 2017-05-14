@@ -19,12 +19,11 @@ class LoginService {
             .then((resp) => resp.json()) // Transform the data into json
             .then(function(data) {
                 if(data.response === 'OK'){
-                    console.log(data.name,data.surname)
                     let user = {username: data.username, name:data.name, surname:data.surname}
                     return appState.setUser(user);
                 }
                 else{
-                    throw{errorMessage: "Wrong credentials"};
+                    console.log("Wrong credentials");
                 }
             })
         });

@@ -20,25 +20,37 @@ class storage(View):
         return super(storage, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
-
         data = json.loads(request.body)
         username = data['username']
         if data['status'] == 'fetch':
-            pList = list(Project.objects.filter(username=User.objects.get(username=username)).values())
+            pList = list(Project.objects.filter(username=User.objects.get(username=data['username'])).values())
             return JsonResponse(dict(projects=pList,response='OK'))
         elif data['status'] == 'store':
-            project = Project.objects.get(username=User.objects.get(username=username),id=data['id'])
+            print data['username'],data['id'],data['inputText']
+            project = Project.objects.get(username=User.objects.get(username=data['username']),project_id=data['id'])
             project.title = data['title']
+            print project.title
             project.source_language = data['source_language']
             project.target_language = data['target_language']
+            print project.sentence_pairs 
+            if project.sentence_pairs == [["",""]]:
+                project.sentence_pairs = [[data['inputText'],data['outputText']]]
+            else:
+                project.sentence_pairs = data['sentence_pairs']
+            print project.sentence_pairs
+            project.inputText = data['inputText']
+            project.outputText = data['outputText']
             project.timestamp = datetime.now()
-            project.sentence_pairs = [["It was the best of times, it was the worst of times", "Zamanlarin en iyisi idi, zamanlarin en kotusu idi."], ["It was the age of wisdom.", "Bilgelik cagi idi."]]
+            #project.sentence_pairs =  data['sentence_pairs']
+            #project.tokens =  data['tokens']
+            #project.mappings =  data['mappings']
+            #project.sentence_pairs = [["It was the best of times, it was the worst of times", "Zamanlarin en iyisi idi, zamanlarin en kotusu idi."], ["It was the age of wisdom.", "Bilgelik cagi idi."]]
             project.save()
             return HttpResponse("OK")
         elif data['status'] == 'create':
             p = Project(username=User.objects.get(username=username),timestamp=datetime.now())
             p.save()
-            return JsonResponse({'id':p.id,'timestamp':p.timestamp,'response':'OK'})
+            return JsonResponse({'id':p.project_id,'timestamp':p.timestamp,'response':'OK'})
 
     def get(self, request):
         username = None

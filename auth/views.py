@@ -33,7 +33,6 @@ class auth(View):
 		data = json.loads(request.body)
 		username = data['username']
 		password = data['password']
-		print username,password
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			return JsonResponse({'username':username, 'name': user.first_name, 'surname': user.last_name, 'response':'OK'})

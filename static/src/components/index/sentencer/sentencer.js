@@ -24,13 +24,12 @@ class Sentencer extends React.Component {
 
     componentDidMount () {
         let id = this.props.params.id.trim();
-        this.setState({id});
+        let sentences = appState.getSentencer(id);
+        console.log("sentencer view. project id:"+id);
+        console.log(sentences.sentences);
+        //let sentences = [["", ""]];
 
-        let edit = appState.getEdit(id);
-
-        let sentences = [["", ""]];
-
-        if (edit !== {}) {
+        /*if (sentences !== {}) {
             this.setState({
                 id: id,
                 projectTitle: edit.projectTitle,
@@ -39,16 +38,19 @@ class Sentencer extends React.Component {
                 sourceLanguage: edit.sourceLanguage,
                 targetLanguage: edit.targetLanguage,
             });
-        }
+        }*/
 
-        sentences = [["Machine learning is the subfield of computer science that gives machines the ability to learn without being explicitly programmed", "Makine ogrenmesi (yapay ogrenme) bilgisayar biliminin bir altdali olup acikca programlanmadiklari halde makinelere ogrenme yetisi verir"], [" Machine learning has close relationship to pattern recognition and artificial intelligence", " Yapay ogrenme, oruntu tanima, yapay zeka alanlariyla yakindan iliskilidir"], [" The key idea behind machine learning is to learn from data and make predictions when new data is encountered", " Yapay ogrenmenin arkasindaki anahtar nokta verilerden ogrenmek ve yeni veri ile karsilasildiginda tahminde bulunmaktir. Ne kadar cok veri, o kadar iyi demektir"], [" Machine learning algorithms learn models on the training data and the prediction accuracy of the models increase proportional to size of the training set. The more the data, the better it is", " Ayni zamanda"], [" At the same time, this field has very strong relationships to statistics, linear algebra and mathematical optimization", " bu alan istatistik, lineer cebir ve matematiksel optimizasyon konulariyla cok guclu baglantisi vardir"], [" Its robust mathematical basis gives rise to reliable algorithms that learn accurate models on the data", " Onun saglam matematiksel temelleri, veriler uzerinden tutarli modeller ogrenen guvenilir algoritmalarin ortaya cikmasini saglamaktir"], [" There are different subfields of machine learning: supervised learning, unsupervised learning, reinforcement learning, active learning etc", " Yapay ogrenmenin farkli altdallari bulunmaktadir: gozetimli ogrenme, gozetimsiz ogrenme, takviyeli ogrenme, aktif ogrenme vb"], [" Supervised learning is one of the most well-known families of learning algorithms", " Gozetimli ogrenme en cok bilinen ogrenme algoritmalari ailelerinden birisidir. Gozetimli ogrenmede, egitme verileri etiketlenmistir ve algoritmaya bu sekilde girilirler. Kara agaci ogrenmesi bir gozetimli ogrenme ornegidir"], [" In supervised learning, training data points are labeled and presented to the algorithm in that way. Decision tree learning is an example of supervised learning", " Agacin her bir nodulunde"], [" At each node of the tree, the algorithms makes a decision based on the labels or values of data points. The aim is to ask the correct question at each node. Unsupervised learning is a little bit different from supervised learning in the sense that data points are not labeled", " algoritma verilerin etiket veya degerlerine dayanarak karar alir"], [" The algorithm groups data points based on their distribution on some n-dimensional space", " Burada amac her nodulde dogru soruyu sormaktir. Gozetimsiz ogrenme ise verilerin etiketlenmemis olmasindan dolayi gozetimli ogrenmeye gore biraz daha farklidir. Algoritma, verilerin n-boyutlu uzayda dagilimlarina gore verileri gruplar"], [" Clustering algorithms can be a good example for unsupervised learning methods", " Kumeleme algoritmalari gozetimsiz ogrenme algoritmalarina iyi bir ornek olabilir"], [" Clustering algorithms group data points that resemble each other", " Kumeleme algoritmalari verileri birbirlerine benzerliklerine gore gruplar"], [" One of the key points of clustering algorithms is choosing the correct distance measure to compute how similar or dissimilar each data point is", " Kilit noktalardan bir tanesi verilerin ne kadar benzer veya farkli oldugunu olcmek icin dogru uzaklik olcusunu secmektir"], [" To find the structure in the data, one should experiment with distance measures and clustering methods depending on the characteristics of the data", " Verilerin yapisini kesfetmek icin, verilerin karasteristik ozelliklerine bagli olarak uzaklik olculeri ve kumeleme algoritmalariyla deney yapmak gereklidir"]];
+        //sentences = [["Machine learning is the subfield of computer science that gives machines the ability to learn without being explicitly programmed", "Makine ogrenmesi (yapay ogrenme) bilgisayar biliminin bir altdali olup acikca programlanmadiklari halde makinelere ogrenme yetisi verir"], [" Machine learning has close relationship to pattern recognition and artificial intelligence", " Yapay ogrenme, oruntu tanima, yapay zeka alanlariyla yakindan iliskilidir"], [" The key idea behind machine learning is to learn from data and make predictions when new data is encountered", " Yapay ogrenmenin arkasindaki anahtar nokta verilerden ogrenmek ve yeni veri ile karsilasildiginda tahminde bulunmaktir. Ne kadar cok veri, o kadar iyi demektir"], [" Machine learning algorithms learn models on the training data and the prediction accuracy of the models increase proportional to size of the training set. The more the data, the better it is", " Ayni zamanda"], [" At the same time, this field has very strong relationships to statistics, linear algebra and mathematical optimization", " bu alan istatistik, lineer cebir ve matematiksel optimizasyon konulariyla cok guclu baglantisi vardir"], [" Its robust mathematical basis gives rise to reliable algorithms that learn accurate models on the data", " Onun saglam matematiksel temelleri, veriler uzerinden tutarli modeller ogrenen guvenilir algoritmalarin ortaya cikmasini saglamaktir"], [" There are different subfields of machine learning: supervised learning, unsupervised learning, reinforcement learning, active learning etc", " Yapay ogrenmenin farkli altdallari bulunmaktadir: gozetimli ogrenme, gozetimsiz ogrenme, takviyeli ogrenme, aktif ogrenme vb"], [" Supervised learning is one of the most well-known families of learning algorithms", " Gozetimli ogrenme en cok bilinen ogrenme algoritmalari ailelerinden birisidir. Gozetimli ogrenmede, egitme verileri etiketlenmistir ve algoritmaya bu sekilde girilirler. Kara agaci ogrenmesi bir gozetimli ogrenme ornegidir"], [" In supervised learning, training data points are labeled and presented to the algorithm in that way. Decision tree learning is an example of supervised learning", " Agacin her bir nodulunde"], [" At each node of the tree, the algorithms makes a decision based on the labels or values of data points. The aim is to ask the correct question at each node. Unsupervised learning is a little bit different from supervised learning in the sense that data points are not labeled", " algoritma verilerin etiket veya degerlerine dayanarak karar alir"], [" The algorithm groups data points based on their distribution on some n-dimensional space", " Burada amac her nodulde dogru soruyu sormaktir. Gozetimsiz ogrenme ise verilerin etiketlenmemis olmasindan dolayi gozetimli ogrenmeye gore biraz daha farklidir. Algoritma, verilerin n-boyutlu uzayda dagilimlarina gore verileri gruplar"], [" Clustering algorithms can be a good example for unsupervised learning methods", " Kumeleme algoritmalari gozetimsiz ogrenme algoritmalarina iyi bir ornek olabilir"], [" Clustering algorithms group data points that resemble each other", " Kumeleme algoritmalari verileri birbirlerine benzerliklerine gore gruplar"], [" One of the key points of clustering algorithms is choosing the correct distance measure to compute how similar or dissimilar each data point is", " Kilit noktalardan bir tanesi verilerin ne kadar benzer veya farkli oldugunu olcmek icin dogru uzaklik olcusunu secmektir"], [" To find the structure in the data, one should experiment with distance measures and clustering methods depending on the characteristics of the data", " Verilerin yapisini kesfetmek icin, verilerin karasteristik ozelliklerine bagli olarak uzaklik olculeri ve kumeleme algoritmalariyla deney yapmak gereklidir"]];
 
-        this.setState({sentences});
+        this.setState(sentences);
     }
 
     autoSentencer () {
-        let { inputText, outputText, sourceLanguage, targetLanguage } = this.state;
-
+        let id = this.props.params.id.trim();
+        //let { inputText, outputText, sourceLanguage, targetLanguage } = this.state;
+        let edit = appState.getEdit(id);
+        console.log(edit.inputText)
+        console.log("auto sentencer is called")
         fetch('sentence/', {
             method: 'POST',
             headers: {
@@ -56,15 +58,16 @@ class Sentencer extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                sentence_pairs: [inputText, outputText],
-                source_language: sourceLanguage,
-                target_language: targetLanguage,
+                sentence_pairs: [[edit.inputText, edit.outputText]],
+                source_language: edit.sourceLanguage,
+                target_language: edit.targetLanguage,
             })
-        }).then(response => {
-            let obj = response.json();
+        })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
             // Access fields in the response object.
-
-            let sentences = obj.sentence_pairs;
+            console.log(data)
+            let sentences = data.sentence_pairs;
             this.setState({
                 "sentences": sentences
             });
@@ -116,8 +119,6 @@ class Sentencer extends React.Component {
     }
 
     renderSentencePair (sentencePair, index) {
-        console.log("Hola");
-        console.log(sentencePair);
 
         return (<div className="center-wv padding-left-10p">
             <div className="padding-20 wh">
@@ -188,7 +189,7 @@ class Sentencer extends React.Component {
 
     saveProject () {
         let user = appState.getUser();
-        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage } = this.state;
+        let { projectTitle, id, user_id = "12345", sentences, inputText, outputText, sourceLanguage, targetLanguage } = this.state;
 
         fetch('storage/', {
             method: 'POST',
@@ -203,6 +204,9 @@ class Sentencer extends React.Component {
                 "timestamp": (Math.floor(Date.now() / 1000)),
                 "source_language": sourceLanguage,
                 "target_language": targetLanguage,
+                "sentence_pairs" : sentences,
+                "inputText" : inputText,
+                "outputText" : outputText,
                 "status": 'store',
             })
         })
