@@ -20,15 +20,13 @@ class register(View):
         if User.objects.filter(username=data['firstName']).exists():
             return HttpResponse("BAD")
         else:
-            user = User.objects.create_user(data['firstName'], data['email'], data['password'])
+            user = User.objects.create_user(username=data['username'],password=data['password'])
+            user.email = data['username']
+            user.first_name = data['firstName']
             user.last_name = data['lastName']
             user.is_active=True
             user.save()
-
-		# now send them an email with a link in order to activate their user account
-		#   you can also use an html django email template to send the email instead
-		#   if you want
-        #send_mail('subject', 'msg [include activation link to View here to activate account]', 'from_email', ['to_email'], fail_silently=False)
+            #send_mail('subject', 'msg [include activation link to View here to activate account]', 'from_email', ['to_email'], fail_silently=False)
         return HttpResponse("OK")
 
     def get(self, request):

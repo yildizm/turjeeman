@@ -68,7 +68,7 @@ class Register extends React.Component {
     }
 
     handleClick () {
-        let { passwordMessage, emailMessage } = this.state;
+        let { passwordMessage, emailMessage, email, password, firstName, lastName } = this.state;
 
         if (passwordMessage === "hidden" && emailMessage === "hidden") {
             // Send request.
@@ -76,8 +76,12 @@ class Register extends React.Component {
             let { email, password, firstName, lastName } = this.state;
 
             let request = {
-
+                "email": email,
+                "password": password,
+                "firstName": firstName,
+                "lastName": lastName,
             };
+
             fetch('register/', {
                 method: 'POST',
                 headers: {
@@ -85,25 +89,23 @@ class Register extends React.Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "email": email,
-                    "password": password,
-                    "firstName": firstName,
-                    "lastName": lastName,
+                    username: email,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName,
                 })
             })
             .then((resp) => resp.json()) // Transform the data into json
-            .then(function(data) {
+            .then(data => {     
+                console.log(data)           
                 if(data.response === 'OK'){
-                    console.log(data.name,data.surname)
-                    let user = {username: data.username, name:data.name, surname:data.surname}
-                    return appState.setUser(user);
+                    router.push("/login");
                 }
                 else{
-                    throw{errorMessage: "error"};
+                    throw{errorMessage: "Wrong credentials"};
                 }
             })
-
-            router.push("/login")
+            .catch(error => console.log(error));
         }
     }
 

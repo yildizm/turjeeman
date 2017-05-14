@@ -35,7 +35,7 @@ class storage(View):
             project.sentence_pairs = [["It was the best of times, it was the worst of times", "Zamanlarin en iyisi idi, zamanlarin en kotusu idi."], ["It was the age of wisdom.", "Bilgelik cagi idi."]]
             project.save()
             return HttpResponse("OK")
-        else:
+        elif data['status'] == 'create':
             p = Project(username=User.objects.get(username=username),timestamp=datetime.now())
             p.save()
             return JsonResponse({'id':p.id,'timestamp':p.timestamp,'response':'OK'})

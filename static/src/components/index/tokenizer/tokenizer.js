@@ -20,6 +20,7 @@ class Tokenizer extends React.Component {
             "outputText": "",
             "sourceLanguage": "",
             "targetLanguage": "",
+            "change": false,
         };
     }
 
@@ -95,12 +96,17 @@ class Tokenizer extends React.Component {
     // }
 
     previousStage () {
-        let { id, sentences, tokens } = this.state;
+        let { id, sentences, tokens, change } = this.state;
 
         let { router } = this.context;
 
         appState.setTokenizer(id, sentences, tokens);
 
+        if (change) {
+            let mappings = [];
+            appState.setMapper(id, mappings);
+        }
+        
         router.push("/sentencer/" + id);
     }
 
@@ -153,26 +159,39 @@ class Tokenizer extends React.Component {
     }
 
     saveProject () {
-        // Don't know any user_ids.
+        let user = appState.getUser();
         let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences, tokens } = this.state;
-
-        // The request object.
-        let request = {
-            "user_id": user_id,
-            "project_id": id,
-            "title": projectTitle,
-            "timestamp": (Math.floor(Date.now() / 1000)),
-            "source_language": sourceLanguage,
-            "target_language": targetLanguage,
-            "sentence_pairs": sentences,
-            "tokens": tokens,
-        }
+        fetch('storage/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": user.username,
+                "id": id,
+                "title": projectTitle,
+                "timestamp": (Math.floor(Date.now() / 1000)),
+                "source_language": sourceLanguage,
+                "target_language": targetLanguage,
+                "status": 'store',
+            })
+        })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
+            if(data.response === 'OK'){
+                console.log("succesful save.");
+            }
+            else{
+                throw{errorMessage: "Wrong credentials"};
+            }
+        }).catch(error => console.error(error));
     }
 
     autoTokenizer () {
         let { sentences } = this.state;
 
-        fetch('tokenizer', {
+        fetch('tokenizer/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

@@ -13,6 +13,8 @@ class Project(models.Model):
 	timestamp = models.DateField()
 	username = models.ForeignKey(User, on_delete=models.CASCADE)
 	sentence_pairs = JSONField(default=[["",""]])
+	tokens = JSONField(default=[])
+	mappings = JSONField(default=[[[[[0,0],[0,0]],[[0,0]]]]])
 	def __str__(self):              # __unicode__ on Python 2
 		return self.title
 
