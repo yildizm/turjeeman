@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
     componentDidMount () {
         let user = appState.getUser();
 
-        fetch('storage', {
+        fetch('storage/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

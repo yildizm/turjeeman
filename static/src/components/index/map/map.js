@@ -229,7 +229,7 @@ class Project extends React.Component {
     autoMapper () {
         let { sentences, tokens } = this.state;
 
-        fetch('mapper', {
+        fetch('mapper/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
