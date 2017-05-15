@@ -35,7 +35,7 @@ class Project extends React.Component {
         let sentencer = appState.getSentencer(id);
         let tokenizer = appState.getTokenizer(id);
         let mapper = appState.getMapper(id);
-
+        console.log(mapper)
         if (edit !== {}) {
             this.setState({
                 id: id,
@@ -58,13 +58,16 @@ class Project extends React.Component {
         }
 
         let tokens = [];
+        let mappings = [];
         for (let i = 0; i < sentences.length; i++) {
             tokens.push([]);
+            mappings.push([[],[]]);
         }
 
         this.setState({
             id: id,
-            tokens: tokens
+            tokens: tokens,
+            mappings: mappings,
         });
 
         if (tokenizer !== {}) {
@@ -148,13 +151,16 @@ class Project extends React.Component {
         let source = sentencePair[0] || "";
         let target = sentencePair[1] || "";
 
-        let { tokens = [], activeColorLiteral, activeColor } = this.state;
+        let { tokens = [], mappings = [], activeColorLiteral, activeColor } = this.state;
 
         let tokens_ = [];
         if (tokens.length > index) {
             tokens_ = tokens[index];
         }
-
+        let mappings_ = [];
+        if (mappings.length > index) {
+            mappings_ = mappings[index];
+       }
         return (<div className="center-wv">
             <TextView
                 input={source}
@@ -163,6 +169,7 @@ class Project extends React.Component {
                 onChange={this.handleTokenChange.bind(this)}
                 index={index}
                 tokens={tokens_}
+                mappings={mappings_}
                 activeColor={activeColor}
             />
         </div>)
@@ -225,9 +232,9 @@ class Project extends React.Component {
 
         // @TODO send request with the "request" object. Send objects in "edit.js", "tokenizer.js", "sentencer.js"
     }
-
-    autoMapper () {
-        let { sentences, tokens } = this.state;
+ 
+    saveMapper () {
+        let { sentences, tokens ,sourceLanguage, targetLanguage, mappings} = this.state;
 
         fetch('mapper/', {
             method: 'POST',
@@ -237,17 +244,45 @@ class Project extends React.Component {
             },
             body: JSON.stringify({
                 sentence_pairs: sentences,
-                tokens: tokens,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
+                mappings: mappings,
+                status: "save_map",
             })
-        }).then(response => {
-            let obj = response.json();
-            // Access fields in the response object.
+        })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
+            /*let mappings = data.mappings;
+            this.setState({
+                "mappings": mappings
+            })*/
+        }).catch(error => console.error(error));
+    }
 
-            let mappings = obj.mappings;
+    autoMapper () {
+        let { id, sentences, tokens, sourceLanguage, targetLanguage, status = "auto_map", mappings} = this.state;
+        fetch('mapper/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sentence_pairs: sentences,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
+                tokens: tokens,
+                status: status,
+            })
+        })
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(data => {
+            console.log(data.mappings);
+            let mappings = data.mappings;
             this.setState({
                 "mappings": mappings
             })
-
+            appState.setMapper(id, mappings);
         }).catch(error => console.error(error));
     }
 
@@ -274,6 +309,13 @@ class Project extends React.Component {
                         className="pt-button pt-intent-save "
                         style={{margin: 20}}>
                         Auto mapper
+                    </button>
+                    <button
+                        onClick={this.saveMapper.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Save mapper
                     </button>
                     <button
                         onClick={this.saveProject.bind(this)}
@@ -309,6 +351,13 @@ class Project extends React.Component {
                         className="pt-button pt-intent-save "
                         style={{margin: 20}}>
                         Auto mapper
+                    </button>
+                    <button
+                        onClick={this.saveMapper.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Save mapper
                     </button>
                     <button
                         onClick={this.saveProject.bind(this)}

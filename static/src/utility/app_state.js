@@ -41,7 +41,7 @@ function AppState() {
 
     appState.getMapper = (id) => {
         for (let i = 0; i < mappers.length; i++) {
-            if (mappers[i].id === id) {
+            if (mappers[i].id == id) {
                 return mappers[i];
             }
         }
@@ -57,7 +57,7 @@ function AppState() {
         };
 
         for (let i = 0; i < mappers.length; i++) {
-            if (mappers[i].id === id) {
+            if (mappers[i].id == id) {
                 index = i;
                 break;
             }
