@@ -104,6 +104,7 @@ class mapper(View):
 			mapper_server_proxy.add_token(target_tokens, target_lang, graph_id)
 
 			for i, (source_sent, target_sent) in enumerate(sentence_pairs):
+				if len(mappings)
 				for m in mappings[i]:
 					s = self.get_string_tokens_from_index_pairs(source_sent, m[0])
 					t = self.get_string_tokens_from_index_pairs(target_sent, m[1])
